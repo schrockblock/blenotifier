@@ -49,6 +49,16 @@ public class RuleDataSource {
         return newRule;
     }
 
+    public boolean updateRule(Rule rule){
+        ContentValues values = new ContentValues();
+        values.put(RuleOpenHelper.COLUMN_COLOR, rule.getColorEnum());
+        values.put(RuleOpenHelper.COLUMN_APP_NAME, rule.getAppName());
+        values.put(RuleOpenHelper.COLUMN_PACKAGE_NAME, rule.getPackageName());
+        String[] whereArgs = {String.valueOf(rule.getId())};
+        return rule.getId() == database.update(RuleOpenHelper.TABLE_NAME,
+                values, RuleOpenHelper.COLUMN_ID + " = ?", whereArgs);
+    }
+
     public ArrayList<Rule> getAllRules() {
         ArrayList<Rule> rules = new ArrayList<Rule>();
 
@@ -64,6 +74,24 @@ public class RuleDataSource {
         // Make sure to close the cursor
         cursor.close();
         return rules;
+    }
+
+    public Rule getRule(int ruleId) {
+        Rule rule = null;
+
+        Cursor cursor = database.query(RuleOpenHelper.TABLE_NAME,
+                allColumns,
+                RuleOpenHelper.COLUMN_ID + " = " + String.valueOf(ruleId),
+                null, null, null, null);
+
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            rule = cursorToRule(cursor);
+        }
+
+        // Make sure to close the cursor
+        cursor.close();
+        return rule;
     }
 
     private Rule cursorToRule(Cursor cursor) {

@@ -1,5 +1,6 @@
 package com.rndapp.blenotifier.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -7,6 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.rndapp.blenotifier.R;
@@ -23,6 +26,11 @@ public class NotificationListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_list);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         RuleDataSource dataSource = new RuleDataSource(this);
         dataSource.open();
@@ -55,11 +63,18 @@ public class NotificationListActivity extends ActionBarActivity {
         mRules = dataSource.getAllRules();
         dataSource.close();
 
-        NotificationListAdapter adapter = new NotificationListAdapter(this, mRules);
+        final NotificationListAdapter adapter = new NotificationListAdapter(this, mRules);
 
-        ((ListView)findViewById(R.id.lv_notification)).setAdapter(adapter);
+        ListView listView = (ListView) findViewById(R.id.lv_notification);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                editRule(adapter.getItem(position).getId());
+            }
+        });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,12 +89,18 @@ public class NotificationListActivity extends ActionBarActivity {
 
         switch (id){
             case R.id.action_add:
-                //TODO: add item
+                editRule(EditNotificationActivity.NoIdValue);
                 return true;
             case R.id.action_settings:
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void editRule(int id){
+        Intent intent = new Intent(this, EditNotificationActivity.class);
+        intent.putExtra(EditNotificationActivity.RuleIdKey, id);
+        startActivity(intent);
     }
 }

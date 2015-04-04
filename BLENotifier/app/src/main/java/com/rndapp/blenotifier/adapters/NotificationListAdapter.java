@@ -51,33 +51,8 @@ public class NotificationListAdapter extends BaseAdapter {
         Rule rule = getItem(position);
         ((TextView)convertView.findViewById(R.id.tv_app_name)).setText(rule.getAppName());
         ((TextView)convertView.findViewById(R.id.tv_app_package)).setText(rule.getPackageName());
+        convertView.findViewById(R.id.v_color).setBackgroundColor(rule.getColor(mContext));
 
-        switch (rule.getColor()){
-            case Rule.RED:
-                convertView.findViewById(R.id.v_color).setBackgroundColor(mContext.getResources().getColor(R.color.red));
-                break;
-            case Rule.GREEN:
-                convertView.findViewById(R.id.v_color).setBackgroundColor(mContext.getResources().getColor(R.color.green));
-                break;
-            case Rule.BLUE:
-                convertView.findViewById(R.id.v_color).setBackgroundColor(mContext.getResources().getColor(R.color.blue));
-                break;
-            case Rule.PURPLE:
-                convertView.findViewById(R.id.v_color).setBackgroundColor(mContext.getResources().getColor(R.color.purple));
-                break;
-            case Rule.ORANGE:
-                convertView.findViewById(R.id.v_color).setBackgroundColor(mContext.getResources().getColor(R.color.orange));
-                break;
-            case Rule.YELLOW:
-                convertView.findViewById(R.id.v_color).setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
-                break;
-            case Rule.BROWN:
-                convertView.findViewById(R.id.v_color).setBackgroundColor(mContext.getResources().getColor(R.color.brown));
-                break;
-            case Rule.PINK:
-                convertView.findViewById(R.id.v_color).setBackgroundColor(mContext.getResources().getColor(R.color.pink));
-                break;
-        }
         return convertView;
     }
 }

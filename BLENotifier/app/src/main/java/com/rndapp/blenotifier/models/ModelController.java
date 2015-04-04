@@ -14,7 +14,7 @@ public class ModelController {
         Rule rule = Matcher.ruleForPackage(context, notification.getPackageName());
         if (rule != null){
             TinyDuinoCommunicator communicator = new TinyDuinoCommunicator(context);
-            communicator.sendColor(rule.getColor());
+            communicator.sendColor(rule.getColorEnum());
         }
     }
 
